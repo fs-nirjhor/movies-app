@@ -1,24 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
+import Movies from "./components/movies/Movies";
+import Appbar from "./components/appbar/Appbar";
+import { Grid } from '@mui/material';
 
 function App() {
+  const [movies, setMovies] = useState([]);
+  useEffect(() => {
+    fetch(`https://api.themoviedb.org/3/movie/popular?api_key=ae1de2df4195d62c2eb7041fd1ec3c5c&language=en-US&page=1`)
+    .then(res => res.json())
+    .then(data => setMovies(data.results) );
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+    <Appbar ></Appbar>
+    <h1 align='center'>Top {movies.length} Movies</h1>
+    <Grid container >
+          {
+           movies.map(movie => <Movies movie={movie} key={movie.id}></Movies>)
+          }
+    </Grid>
+    </>
   );
 }
 
